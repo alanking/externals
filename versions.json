@@ -266,7 +266,7 @@
         "fpm_directories": ["bin","include","lib"]
     },
     "mungefs": {
-        "commitish": "1.0.2",
+        "commitish": "master",
         "version_string": "1.0.2",
         "license": "BSD 3-Clause",
         "consortium_build_number": "0",
