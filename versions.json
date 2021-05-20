@@ -337,10 +337,10 @@
         "fpm_directories": ["usr/bin"]
     },
     "nanodbc": {
-        "commitish": "v2.13.0",
+        "commitish": "26021d889820127e035d353cf8147f66c4b07609",
         "version_string": "2.13.0",
         "license": "MIT",
-        "consortium_build_number": "1",
+        "consortium_build_number": "2",
         "externals_root": "opt/irods-externals",
         "build_steps": [
             "mkdir -p build",

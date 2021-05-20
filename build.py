@@ -295,6 +295,8 @@ def build_package(target, build_native_package):
             if target == 'boost':
                 # using boostorg namespace instead of forking 50+ relatively linked submodules
                 run_cmd(['git', 'clone', 'https://github.com/boostorg/boost'])
+            elif target == 'nanodbc':
+                run_cmd(['git', 'clone', 'https://github.com/1015onasaturdaynight/{0}'.format(target)])
             else:
                 run_cmd(['git', 'clone', 'https://github.com/irods/{0}'.format(target)])
         os.chdir(os.path.join(build_dir,target))
