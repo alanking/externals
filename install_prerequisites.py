@@ -81,6 +81,8 @@ def main():
                'libcurl4-gnutls-dev','libxml2-dev','pkg-config','uuid-dev','libssl-dev','fuse','libfuse2', 
                'libfuse-dev','libmicrohttpd-dev','unixodbc-dev']
         build.run_cmd(cmd, check_rc='installing prerequisites failed')
+        if pld in ['debian']:
+            cmd.extend(['g++', 'procps', 'gpg', 'python2-dev'])
         # if old, bootstrap g++
         if pld in ['Ubuntu'] and platform.linux_distribution()[1] < '14':
             # ubuntu12 ships with g++ 4.6 - needs 4.8+ to build clang
@@ -98,11 +100,17 @@ def main():
             cmd = ['sudo', 'update-alternatives', '--install', '/usr/bin/gcc', 'gcc', '/usr/bin/gcc-4.8', '50']
             build.run_cmd(cmd, check_rc='swapping gcc-4.8 failed')
         # if new, get autoconf
-        if pld in ['Ubuntu'] and platform.linux_distribution()[1] > '16':
-            log.info('Detected: Ubuntu 16+ - need to get autoconf')
+        if pld in ['Ubuntu']:
+            if platform.linux_distribution()[1] > '16':
+                log.info('Detected: Ubuntu 16+ - need to get autoconf')
+                cmd = ['sudo','apt-get','install','-y','autoconf','rsync']
+                build.run_cmd(cmd, check_rc='installing autoconf failed')
+            if platform.linux_distribution()[1] >= '16':
+                cmd = ['sudo','apt-get','install','-y','patchelf']
+                build.run_cmd(cmd, check_rc='installing patchelf failed')
+        else:
             cmd = ['sudo','apt-get','install','-y','autoconf','rsync']
             build.run_cmd(cmd, check_rc='installing autoconf failed')
-        if pld in ['Ubuntu'] and platform.linux_distribution()[1] >= '16':
             cmd = ['sudo','apt-get','install','-y','patchelf']
             build.run_cmd(cmd, check_rc='installing patchelf failed')
 
