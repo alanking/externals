@@ -102,7 +102,8 @@ def main():
             build.run_cmd(cmd, check_rc='rpm dnf install failed')
             cmd = ['sudo', 'dnf', 'config-manager', '--set-enabled', 'powertools']
             build.run_cmd(cmd, check_rc='rpm dnf config-manager failed')
-            cmd = ['sudo', 'dnf', 'install', '-y', 'procps', 'redhat-lsb-core', 'rsync'] # For ps, lsb_release, and rsync.
+            #cmd = ['sudo', 'dnf', 'install', '-y', 'procps', 'redhat-lsb-core', 'rsync'] # For ps, lsb_release, and rsync.
+            cmd = ['sudo', 'dnf', 'install', '-y', 'procps', 'rsync'] # For ps, lsb_release, and rsync.
             build.run_cmd(cmd, check_rc='yum install failed')
         else:
             cmd = ['sudo', 'rpm', '--rebuilddb']
@@ -120,7 +121,7 @@ def main():
         cmd = ['sudo','yum','install','-y','curl','gcc-c++','git','autoconf','automake','texinfo',
                'help2man','rpm-build','rubygems','ruby-devel','zlib-devel','fuse','fuse-devel',
                'bzip2-devel','libcurl-devel','libmicrohttpd-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel','unixODBC-devel','patchelf']
-        if distro_id in ['rocky', 'almalinux']:
+        if distro_id in ['rocky', 'almalinux'] and int(distro.major_version()) < 9:
             cmd.append('python36-devel') # python39-devel also available.
         else:
             cmd.append('python3-devel')
