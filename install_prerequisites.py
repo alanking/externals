@@ -100,9 +100,13 @@ def main():
         if distro_id in ['rocky', 'almalinux']:
             cmd = ['sudo', 'dnf', 'install', '-y', 'epel-release', 'dnf-plugins-core']
             build.run_cmd(cmd, check_rc='rpm dnf install failed')
-            cmd = ['sudo', 'dnf', 'config-manager', '--set-enabled', 'powertools']
+            codeready_repo_name = 'powertools' if int(distro_major_version) < 9 else 'crb'
+            cmd = ['sudo', 'dnf', 'config-manager', '--set-enabled', codeready_repo_name]
             build.run_cmd(cmd, check_rc='rpm dnf config-manager failed')
-            cmd = ['sudo', 'dnf', 'install', '-y', 'procps', 'redhat-lsb-core', 'rsync'] # For ps, lsb_release, and rsync.
+            cmd = ['sudo', 'dnf', 'install', '-y', 'procps', 'rsync'] # For ps and rsync.
+            # lsb_release package appears to not be available in versions of EL 9 and on(?).
+            if int(distro_major_version) < 9:
+                cmd.append('redhat-lsb-core')
             build.run_cmd(cmd, check_rc='yum install failed')
         else:
             cmd = ['sudo', 'rpm', '--rebuilddb']
@@ -117,14 +121,20 @@ def main():
         # get prerequisites
         cmd = ['sudo','yum','install','-y','epel-release','wget','openssl','ca-certificates']
         build.run_cmd(cmd, check_rc='installing epel failed')
-        cmd = ['sudo','yum','install','-y','curl','gcc-c++','git','autoconf','automake','texinfo',
+        package_list = ['curl','gcc-c++','git','autoconf','automake','texinfo',
                'help2man','rpm-build','rubygems','ruby-devel','zlib-devel','fuse','fuse-devel',
                'bzip2-devel','libcurl-devel','libmicrohttpd-devel','libxml2-devel','libtool','libuuid-devel','openssl-devel','unixODBC-devel','patchelf']
-        if distro_id in ['rocky', 'almalinux']:
-            cmd.append('python36-devel') # python39-devel also available.
+
+        # For some versions, curl is installed by another step of this process and manually installing the package here
+        # creates a conflict. Rather than conditionally installing curl (or any other package which may cause problems
+        # in the future) we use --skip-broken to avoid broken packages.
+        cmd = ['sudo','yum','install','-y','--skip-broken']
+        if distro_id in ['rocky', 'almalinux'] and int(distro_major_version) < 9:
+            package_list.append('python36-devel')
         else:
-            cmd.append('python3-devel')
-        build.run_cmd(cmd, check_rc='installing prerequisites failed')
+            package_list.append('python3-devel')
+
+        build.run_cmd(cmd + package_list, check_rc='installing prerequisites failed')
 
     elif distro_id in ['opensuse ', 'sles']:
         log.info('Detected: {0}'.format(distro_id))
