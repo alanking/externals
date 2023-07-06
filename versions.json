@@ -266,7 +266,7 @@
         "consortium_build_number": "0",
         "externals_root": "opt/irods-externals",
         "build_steps": [
-            "CFLAGS=-fPIC make -jTEMPLATE_JOBS TEMPLATE_LIBS3_MAKEFILE_STRING",
+            "CFLAGS='-fPIC -Wno-error=format-overflow' make -jTEMPLATE_JOBS TEMPLATE_LIBS3_MAKEFILE_STRING",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/bin",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/include",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/lib",
