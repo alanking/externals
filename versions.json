@@ -260,13 +260,14 @@
     },
     "libs3": {
         "enable_sha": true,
-        "commitish": "00d2dbe355b78b507f890458b3d656f162384799",
-        "version_string": "00d2dbe3",
+        "git_repository": "https://github.com/alanking/libs3",
+        "commitish": "26",
+        "version_string": "alanking-26",
         "license": "LGPL v3",
         "consortium_build_number": "0",
         "externals_root": "opt/irods-externals",
         "build_steps": [
-            "CFLAGS='-fPIC -Wno-error=format-overflow' make -jTEMPLATE_JOBS TEMPLATE_LIBS3_MAKEFILE_STRING",
+            "CFLAGS='-fPIC make -jTEMPLATE_JOBS TEMPLATE_LIBS3_MAKEFILE_STRING",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/bin",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/include",
             "mkdir -p TEMPLATE_INSTALL_PREFIX/lib",
