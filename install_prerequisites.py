@@ -143,7 +143,7 @@ def main():
             if int(distro_major_version) == 9:
                 # For version 9, curl is installed by another step of this process and manually installing the package
                 # here creates a conflict. Just delete curl from the list of packages to install.
-                del main_package_list[0]
+                del main_package_list[main_package_list.index('curl')]
             main_package_list.append('python3-devel')
             build.run_cmd(cmd + main_package_list, check_rc='installing prerequisites failed')
 
